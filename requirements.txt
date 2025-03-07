@@ -3,6 +3,3 @@ langchain
 streamlit
 python-dotenv
 PyPdf2
-
-
--e .
