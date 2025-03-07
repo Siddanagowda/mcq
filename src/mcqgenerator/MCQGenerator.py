@@ -5,7 +5,8 @@ import traceback
 from src.mcqgenerator.utils import read_file,get_table_data
 from src.mcqgenerator.logger import logging
 
-from langchain.chat_models import ChatOpenAI
+from langchain_community.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from langchain.chains import SequentialChain
@@ -14,9 +15,9 @@ from langchain.chains import SequentialChain
 # load_dotenv()
 # key = os.getenv("OPENAI_API_KEY")
 
-key="your_api_key"
+key="your openai key"
 
-llm=ChatOpenAI(openai_api_key=key,model_name="gpt-3.5-turbo",temperature=0.7)
+llm=ChatOpenAI(openai_api_key=key,model_name="gpt-4o-mini",temperature=0.7)
 
 TEMP="""
 Text:{text}
@@ -30,7 +31,7 @@ Ensure to make {number} MCQs
 
 """
 prompt=PromptTemplate(
-    input=["text","number","subject","tone","respone_json"],
+    input=["text","number","subject","tone","response_json"],
     template=TEMP
 )
 chain=LLMChain(llm=llm,prompt=prompt,output_key="quiz",verbose=True)

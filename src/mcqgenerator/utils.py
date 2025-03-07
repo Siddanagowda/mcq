@@ -2,6 +2,7 @@ import os
 import json
 import PyPDF2
 import traceback
+import re
 
 def read_file(file):
     if file.name.endswith(".pdf"):
@@ -34,7 +35,9 @@ def get_table_data(quiz_str):
         # Clean up the quiz_str to remove extra formatting
         quiz_str = quiz_str.replace("RESPONSE_JSON", "").strip()
         quiz_str = quiz_str.strip("```").strip()
-        
+        quiz_str = quiz_str.replace('"',"").strip()
+        quiz_str = re.sub(r'\"([^\"]*)\"', r'\\\"\1\\\"', quiz_str)
+
         # Replace single quotes with double quotes
         quiz_str = quiz_str.replace("'", "\"")
 
@@ -43,20 +46,25 @@ def get_table_data(quiz_str):
 
         # Convert the quiz from a str to dict
         quiz_dict = json.loads(quiz_str)
+
+        print(f"\n\n\nQuiz Dict: {quiz_dict}\n\n\n") # Debug logging
+
         quiz_table_data = []
         
         # Iterate over the quiz dictionary and extract the required information
         for key, value in quiz_dict.items():
-            mcq = value["mcq"]
-            options = " || ".join(
+            mcq = value['mcq']
+            options = ' || '.join(
                 [
-                    f"{option} -> {option_value}" for option, option_value in value["options"].items()
+                    f'{option} -> {option_value}' for option, option_value in value['options'].items()
                 ]
             )
             
-            correct = value["correct"]
-            quiz_table_data.append({"MCQ": mcq, "Choices": options, "Correct": correct})
+            correct = value['correct']
+            quiz_table_data.append({'MCQ': mcq, 'Options': options, 'Correct': correct})
         
+        print(f"\n\n\nQuiz Table Data: {quiz_table_data}\n\n\n") # Debug logging
+
         return quiz_table_data
         
     except json.JSONDecodeError as e:
