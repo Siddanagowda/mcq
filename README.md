@@ -94,7 +94,7 @@ mcq-generator/
 
 ```
 
-# Configuration
+## Configuration
 
 1. **Response.json:** Template for the MCQ responses.
 2. **data.txt**: Sample data file used for generating MCQs.
@@ -103,7 +103,7 @@ mcq-generator/
 5. **src/mcqgenerator/utils.py**: Utility functions for reading files and formatting data.
 6. **src/mcqgenerator/logger.py**: Logging configuration.
 
-# License
+## License
 This project is licensed under the MIT License. See the LICENSE file for details.
 
 ```sh
