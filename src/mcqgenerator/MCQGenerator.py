@@ -15,7 +15,7 @@ from langchain.chains import SequentialChain
 # load_dotenv()
 # key = os.getenv("OPENAI_API_KEY")
 
-key="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"
+key=""
 
 llm=ChatOpenAI(openai_api_key=key,model_name="gpt-4o-mini",temperature=0.7)
 
