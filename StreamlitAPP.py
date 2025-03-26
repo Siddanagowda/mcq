@@ -12,6 +12,7 @@ from src.mcqgenerator.logger import logging
 import streamlit as st
 from src.mcqgenerator.MCQGenerator import seq_chain
 from langchain_community.callbacks.manager import get_openai_callback
+from fpdf import FPDF  # Import the FPDF library
 
 with open(r'C:\Users\siddana gowda\mcq\Response.json') as file:
     RESPONSE_JSON = json.load(file)
@@ -65,6 +66,32 @@ if button and uploaded_file is not None and mcq_count and subject and tone:
                         df.index += 1
                         st.table(df)
                         st.text_area(label="Review", value=response.get("review", ""))
+
+                        # Add a button to download the MCQs as a PDF
+                        def generate_pdf(dataframe):
+                            pdf = FPDF()
+                            pdf.set_auto_page_break(auto=True, margin=15)
+                            pdf.add_page()
+                            pdf.set_font("Arial", size=12)
+
+                            pdf.cell(200, 10, txt="Generated MCQs", ln=True, align="C")
+                            pdf.ln(10)
+
+                            for index, row in dataframe.iterrows():
+                                pdf.multi_cell(0, 10, txt=f"Q{index}: {row['MCQ']}")
+                                pdf.multi_cell(0, 10, txt=f"Choices: {row['Choices']}")
+                                pdf.multi_cell(0, 10, txt=f"Correct Answer: {row['Correct']}")
+                                pdf.ln(5)
+
+                            return pdf.output(dest="S").encode("latin1")
+
+                        pdf_data = generate_pdf(df)
+                        st.download_button(
+                            label="Download MCQs as PDF",
+                            data=pdf_data,
+                            file_name="mcqs.pdf",
+                            mime="application/pdf",
+                        )
                     else:
                         st.error("Error in table data")
                 else:
